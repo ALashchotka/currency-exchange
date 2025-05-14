@@ -9,3 +9,5 @@ export type TCurrency = {
   countryCodeISO2: string; // "US";
   flagSrc: string; // "https://flagcdn.com/h40/us.png";
 };
+
+export type TRates = Record<string, number>;

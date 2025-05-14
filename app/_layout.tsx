@@ -1,15 +1,22 @@
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { useCurrencies } from "@/hooks/useCurrencies";
+import { IStore, useStore } from "@/store";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
+SplashScreen.preventAutoHideAsync();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+export default function RootLayout() {
+  const isDataLoaded = useStore(
+    (state: IStore) =>
+      !!state.currencies.length &&
+      !!state.sourceCurrencyCode &&
+      !!state.targetCurrencyCode
+  );
+
+  useCurrencies();
+
+  if (!isDataLoaded) {
     return null;
   }
 
@@ -17,8 +24,8 @@ export default function RootLayout() {
     <>
       <StatusBar style="auto" />
 
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
         <Stack.Screen name="currencySelector" />
       </Stack>
     </>

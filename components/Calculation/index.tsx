@@ -1,8 +1,16 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { Colors } from "@/constants/Colors";
 import { TCurrency } from "@/constants/types";
-import { useState } from "react";
+import { useRates } from "@/hooks/useRates";
+import { validateAmount } from "@/utils/validation";
+import { useMemo, useState } from "react";
 
 export function Calculation({
   sourceCurrency,
@@ -11,8 +19,20 @@ export function Calculation({
   sourceCurrency: TCurrency;
   targetCurrency: TCurrency;
 }) {
+  const rates = useRates();
+
   const [value, setValue] = useState("");
-  const [result, setResult] = useState("");
+
+  const result = useMemo(
+    () =>
+      rates?.[targetCurrency.code]
+        ? validateAmount(
+            parseFloat(value.split(",").join(".")) * rates[targetCurrency.code],
+            targetCurrency.decimalDigits
+          )
+        : 0,
+    [rates, targetCurrency, value]
+  );
 
   return (
     <View style={styles.container}>
@@ -22,8 +42,12 @@ export function Calculation({
         style={styles.input}
         placeholder="0"
         placeholderTextColor={Colors.text + "80"}
-        onChangeText={setValue}
+        onChangeText={(text) =>
+          setValue(validateAmount(text, sourceCurrency.decimalDigits))
+        }
         value={value}
+        keyboardType="numeric"
+        underlineColorAndroid="transparent"
       />
 
       <View style={styles.resultContainer}>
@@ -33,10 +57,20 @@ export function Calculation({
           {` =`}
         </Text>
 
-        <Text style={styles.resultTarget}>
-          {result || 0}
-          {" " + targetCurrency.symbolNative}
-        </Text>
+        {!!rates && (
+          <Text style={styles.resultTarget}>
+            {result || 0}
+            {" " + targetCurrency.symbolNative}
+          </Text>
+        )}
+
+        {!rates && (
+          <ActivityIndicator
+            style={styles.loadingIndicator}
+            color={Colors.text}
+            size="large"
+          />
+        )}
       </View>
     </View>
   );
@@ -75,6 +109,13 @@ const styles = StyleSheet.create({
   resultTarget: {
     marginTop: 4,
     fontSize: 42,
+    height: 50,
     color: Colors.text,
+  },
+
+  loadingIndicator: {
+    alignSelf: "flex-start",
+    marginTop: 4,
+    height: 50,
   },
 });

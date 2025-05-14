@@ -7,15 +7,17 @@ import { TCurrency } from "@/constants/types";
 export function CurrencySelector({
   currency,
   title,
+  onPress,
 }: {
   currency: TCurrency;
   title: string;
+  onPress: () => void;
 }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
 
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
         <Image style={styles.flag} source={{ uri: currency.flagSrc }} />
 
         <Text style={styles.buttonText}>{currency.code}</Text>
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#DEDEDE",
+    backgroundColor: Colors.button,
   },
   buttonText: {
     color: Colors.text,
