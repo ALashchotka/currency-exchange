@@ -21,6 +21,7 @@ import { IStore, useStore } from "@/store";
 
 export default function CurrencySelectorScreen() {
   const insets = useSafeAreaInsets();
+  const { paramKey } = useLocalSearchParams();
 
   const {
     currencies,
@@ -38,14 +39,12 @@ export default function CurrencySelectorScreen() {
     }))
   );
 
-  const { paramKey } = useLocalSearchParams();
+  const [searchValue, setSearchValue] = useState("");
 
   const currencyCode = useMemo(
     () => (paramKey === "target" ? targetCurrencyCode : sourceCurrencyCode),
     [paramKey, sourceCurrencyCode, targetCurrencyCode]
   );
-
-  const [searchValue, setSearchValue] = useState("");
 
   const filteredData = useMemo(
     () =>

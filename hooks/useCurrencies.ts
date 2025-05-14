@@ -1,12 +1,12 @@
 import axios from "axios";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
+import { Alert } from "react-native";
 import { useShallow } from "zustand/react/shallow";
 
 import currencies from "@/assets/json/currencies.json";
 import { TCurrency } from "@/constants/types";
 import { IStore, useStore } from "@/store";
-import { Alert } from "react-native";
 
 export const useCurrencies = () => {
   const {

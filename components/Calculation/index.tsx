@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -10,7 +11,6 @@ import { Colors } from "@/constants/Colors";
 import { TCurrency } from "@/constants/types";
 import { useRates } from "@/hooks/useRates";
 import { validateAmount } from "@/utils/validation";
-import { useMemo, useState } from "react";
 
 export function Calculation({
   sourceCurrency,

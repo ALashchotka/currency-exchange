@@ -1,8 +1,10 @@
-import { useCurrencies } from "@/hooks/useCurrencies";
-import { IStore, useStore } from "@/store";
+import "react-native-reanimated";
+
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import "react-native-reanimated";
+
+import { useCurrencies } from "@/hooks/useCurrencies";
+import { IStore, useStore } from "@/store";
 
 SplashScreen.preventAutoHideAsync();
 
